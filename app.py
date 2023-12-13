@@ -4,37 +4,6 @@ from sqlalchemy import text
 # Set Streamlit app-wide theme
 st.set_page_config(page_title="Cinema Schedule Management System", page_icon=":movie_camera:", layout="wide")
 
-# Custom color theme
-st.markdown(
-    """
-    <style>
-        .css-1v3fvcr {
-            color: #fff;
-        }
-
-        .css-1uyte9r {
-            background-color: #2a2a72;
-            background-image: linear-gradient(315deg, #2a2a72 0%, #009ffd 74%);
-            color: #fff;
-        }
-
-        .css-1l4w6pd {
-            color: #000;
-        }
-
-        .css-r26lvk {
-            background-color: #f8f9fa;
-            color: #000;
-        }
-
-        .st-bw {
-            color: #2a2a72;
-        }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
-
 list_genre = ['', 'Sci-Fi', 'Drama', 'Action', 'Crime']
 list_theater_number = ['', '1', '2', '3']
 
