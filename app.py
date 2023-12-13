@@ -62,7 +62,6 @@ if page_cinema == "Edit Cinema Schedule":
                                           WHERE id=:9;')
                             session.execute(query_update_cinema, {'1': movie_title_baru, '2': genre_baru, '3': director_baru,'4': release_date_baru, '5': start_time_baru, '6': end_time_baru,'7': theater_number_baru, '8': ticket_price_baru, '9': id})
                             session.commit()
-                            st.experimental_rerun()
                           
                 with col2:
                     if st.form_submit_button('DELETE'):
