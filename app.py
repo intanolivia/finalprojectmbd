@@ -16,7 +16,9 @@ st.header('🎬 CINEMA SCHEDULE MANAGEMENT SYSTEM')
 
 # Genre Filter
 selected_genre = st.selectbox("Filter by Genre", list_genre)
-data = conn.query(f"SELECT * FROM movie_schedule WHERE genre = '{selected_genre}' ORDER By id;", ttl="0").set_index('id')
+# Handling empty string
+selected_genre = selected_genre if selected_genre != '' else None
+data = conn.query(f"SELECT * FROM movie_schedule WHERE genre = :genre ORDER By id;", {'genre': selected_genre}, ttl="0").set_index('id')
 
 # Display the filtered data
 st.dataframe(data)
@@ -26,7 +28,9 @@ page_cinema = st.sidebar.selectbox("Choose Menu", ["🎥 View Cinema Schedule", 
 if page_cinema == "🎥 View Cinema Schedule":
     # Genre Filter for View Cinema Schedule
     selected_genre_view = st.selectbox("Filter by Genre", list_genre)
-    data_view = conn.query(f"SELECT * FROM movie_schedule WHERE genre = '{selected_genre_view}' ORDER By id;", ttl="0").set_index('id')
+    # Handling empty string
+    selected_genre_view = selected_genre_view if selected_genre_view != '' else None
+    data_view = conn.query(f"SELECT * FROM movie_schedule WHERE genre = :genre ORDER By id;", {'genre': selected_genre_view}, ttl="0").set_index('id')
     st.dataframe(data_view)
 
 if page_cinema == "✏ Edit Cinema Schedule":
