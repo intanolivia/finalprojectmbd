@@ -4,8 +4,12 @@ from sqlalchemy import text
 list_genre = ['', 'Sci-Fi', 'Drama', 'Action', 'Comedy']
 list_theater_number = ['', '1', '2', '3']
 
-conn = st.connection("postgresql", type="sql", 
-                     url="postgresql://intanoliviaitaliyana:BHs3h0cygXUa@ep-morning-waterfall-53636265.us-east-2.aws.neon.tech/web")
+@st.cache(allow_output_mutation=True)
+def get_connection():
+    return st._get_session()
+
+conn = get_connection()
+
 with conn.session as session:
     query = text('CREATE TABLE IF NOT EXISTS movie_schedule (id serial, movie_title varchar, genre varchar, director varchar, \
                                                             release_date date, start_time time, end_time time, theater_number int, ticket_price decimal);')
