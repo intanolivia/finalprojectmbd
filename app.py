@@ -46,7 +46,7 @@ if page_cinema == "Edit Cinema Schedule":
                 release_date_baru = st.date_input("Release Date", release_date_lama)
                 start_time_baru = st.time_input("Start Time", start_time_lama)
                 end_time_baru = st.time_input("End Time", end_time_lama)
-                theater_number_baru = st.selectbox("Theater Number", list_theater_number, list_theater_number.index(str(theater_number_lama)))
+                theater_number_baru = st.selectbox("Theater Number", list_theater_number, list_theater_number.index(theater_number_lama))
                 ticket_price_baru = st.number_input("Ticket Price", ticket_price_lama)
 
                 col1, col2 = st.columns([1, 6])
