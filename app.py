@@ -7,26 +7,26 @@ list_symptom = ['', 'male', 'female']
 conn = st.connection("postgresql", type="sql", 
                      url="postgresql://intanoliviaitaliyana:BHs3h0cygXUa@ep-morning-waterfall-53636265.us-east-2.aws.neon.tech/web")
 with conn.session as session:
-    query = text('CREATE TABLE IF NOT EXISTS PATIENT_DATA (id serial, doctor_name varchar, patient_name varchar, gender char(25), \
+    query = text('CREATE TABLE IF NOT EXISTS SCHEDULE (id serial, doctor_name varchar, patient_name varchar, gender char(25), \
                                                        symptom text, handphone varchar, address text, tanggal date);')
     session.execute(query)
 
-st.header('PATIENT DATA MANAGEMENT SYSTEM')
-page = st.sidebar.selectbox("Choose Menu", ["View Data", "Edit Data"])
+st.header('SIMPLE HOSPITAL DATA MANAGEMENT SYS')
+page = st.sidebar.selectbox("Pilih Menu", ["View Data","Edit Data"])
 
 if page == "View Data":
-    data = conn.query('SELECT * FROM patient_data ORDER BY id;', ttl="0").set_index('id')
+    data = conn.query('SELECT * FROM schedule ORDER By id;', ttl="0").set_index('id')
     st.dataframe(data)
 
 if page == "Edit Data":
-    if st.button('Add Patient Data'):
+    if st.button('Tambah Data'):
         with conn.session as session:
-            query = text('INSERT INTO patient_data (doctor_name, patient_name, gender, symptom, handphone, address, waktu, tanggal) \
+            query = text('INSERT INTO schedule (doctor_name, patient_name, gender, symptom, handphone, address, waktu, tanggal) \
                           VALUES (:1, :2, :3, :4, :5, :6, :7, :8);')
             session.execute(query, {'1':'', '2':'', '3':'', '4':'[]', '5':'', '6':'', '7':None, '8':None})
             session.commit()
 
-    data = conn.query('SELECT * FROM patient_data ORDER BY id;', ttl="0")
+    data = conn.query('SELECT * FROM schedule ORDER By id;', ttl="0")
     for _, result in data.iterrows():        
         id = result['id']
         doctor_name_lama = result["doctor_name"]
@@ -54,7 +54,7 @@ if page == "Edit Data":
                 with col1:
                     if st.form_submit_button('UPDATE'):
                         with conn.session as session:
-                            query = text('UPDATE patient_data \
+                            query = text('UPDATE schedule \
                                           SET doctor_name=:1, patient_name=:2, gender=:3, symptom=:4, \
                                           handphone=:5, address=:6, waktu=:7, tanggal=:8 \
                                           WHERE id=:9;')
@@ -65,7 +65,7 @@ if page == "Edit Data":
                 
                 with col2:
                     if st.form_submit_button('DELETE'):
-                        query = text(f'DELETE FROM patient_data WHERE id=:1;')
+                        query = text(f'DELETE FROM schedule WHERE id=:1;')
                         session.execute(query, {'1':id})
                         session.commit()
                         st.experimental_rerun()
