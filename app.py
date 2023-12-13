@@ -18,7 +18,7 @@ if page_cinema == "View Cinema Schedule":
     st.dataframe(data)
 
 if page_cinema == "Edit Cinema Schedule":
-    if st.button('Tambah Data'):
+    if st.button('Add Data'):
         with conn.session as session:
             query = text('INSERT INTO movie_schedule (movie_title, genre, director, release_date, start_time, end_time, theater_number, ticket_price) VALUES (:1, :2, :3, :4, :5, :6, :7, :8);')
             session.execute(query, {'1':'', '2':'', '3':'', '4':'', '5':'', '6':'', '7':'', '8':''})
