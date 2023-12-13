@@ -13,11 +13,21 @@ with conn.session as session:
     session.execute(query)
 
 st.header('🎬 CINEMA SCHEDULE MANAGEMENT SYSTEM')
+
+# Genre Filter
+selected_genre = st.selectbox("Filter by Genre", list_genre)
+data = conn.query(f"SELECT * FROM movie_schedule WHERE genre = '{selected_genre}' ORDER By id;", ttl="0").set_index('id')
+
+# Display the filtered data
+st.dataframe(data)
+
 page_cinema = st.sidebar.selectbox("Choose Menu", ["🎥 View Cinema Schedule", "✏ Edit Cinema Schedule"])
 
 if page_cinema == "🎥 View Cinema Schedule":
-    data = conn.query('SELECT * FROM movie_schedule ORDER By id;', ttl="0").set_index('id')
-    st.dataframe(data)
+    # Genre Filter for View Cinema Schedule
+    selected_genre_view = st.selectbox("Filter by Genre", list_genre)
+    data_view = conn.query(f"SELECT * FROM movie_schedule WHERE genre = '{selected_genre_view}' ORDER By id;", ttl="0").set_index('id')
+    st.dataframe(data_view)
 
 if page_cinema == "✏ Edit Cinema Schedule":
     if st.button('Add Data'):
@@ -26,7 +36,6 @@ if page_cinema == "✏ Edit Cinema Schedule":
             session.execute(query, {'1':'', '2':'', '3':'', '4':'', '5':'', '6':'', '7':'', '8':''})
             session.commit()
 
-    data = conn.query('SELECT * FROM movie_schedule ORDER By id;', ttl="0")
     for _, result in data.iterrows():        
         id = result['id']
         movie_title_lama = result["movie_title"]
