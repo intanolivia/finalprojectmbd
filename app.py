@@ -52,7 +52,7 @@ if page_cinema == "Edit Cinema Schedule":
                 with col1:
                     if st.form_submit_button('UPDATE'):
                         with conn.session as session:
-                            query = text('UPDATE schedule \
+                            query = text('UPDATE movie_schedule \
                                           SET movie_title=:1, genre=:2, director=:3, release_date=:4, \
                                           start_time=:5, end_time=:6, theater_number=:7, ticket_price=:8 \
                                           WHERE id=:9;')
