@@ -22,6 +22,8 @@ if page_cinema == "View Cinema Schedule":
     data_cinema = pd.read_sql('SELECT * FROM movie_schedule ORDER BY id;', engine)
     st.dataframe(data_cinema)
 
+# ... (previous code)
+
 if page_cinema == "Edit Cinema Schedule":
     # Add Movie Schedule Button
     if st.button('Add Movie Schedule'):
@@ -53,19 +55,15 @@ if page_cinema == "Edit Cinema Schedule":
                 theater_number_baru = st.selectbox("Theater Number",["1", "2", "3"])
                 ticket_price_baru = st.number_input("Ticket Price", ticket_price_lama)
 
-                col1, col2 = st.columns([1, 6])
+                if st.form_submit_button('UPDATE'):
+                    with engine.connect() as connection:
+                        query_update_cinema = text('UPDATE movie_schedule \
+                                      SET movie_title=:1, genre=:2, director=:3, release_date=:4, \
+                                      start_time=:5, end_time=:6, theater_number=:7, ticket_price=:8 \
+                                      WHERE id=:9;')
+                        connection.execute(query_update_cinema, {'1': movie_title_baru, '2': genre_baru, '3': director_baru,'4': release_date_baru, '5': start_time_baru, '6': end_time_baru,'7': theater_number_baru, '8': ticket_price_baru, '9': id})
 
-                with col1:
-                    if st.form_submit_button('UPDATE'):
-                        with engine.connect() as connection:
-                            query_update_cinema = text('UPDATE movie_schedule \
-                                          SET movie_title=:1, genre=:2, director=:3, release_date=:4, \
-                                          start_time=:5, end_time=:6, theater_number=:7, ticket_price=:8 \
-                                          WHERE id=:9;')
-                            connection.execute(query_update_cinema, {'1': movie_title_baru, '2': genre_baru, '3': director_baru,'4': release_date_baru, '5': start_time_baru, '6': end_time_baru,'7': theater_number_baru, '8': ticket_price_baru, '9': id})
-
-                with col2:
-                    if st.form_submit_button('DELETE'):
-                        with engine.connect() as connection:
-                            query_delete_cinema = text('DELETE FROM movie_schedule WHERE id=:1;')
-                            connection.execute(query_delete_cinema, {'1': id})
+                if st.form_submit_button('DELETE'):
+                    with engine.connect() as connection:
+                        query_delete_cinema = text('DELETE FROM movie_schedule WHERE id=:1;')
+                        connection.execute(query_delete_cinema, {'1': id})
