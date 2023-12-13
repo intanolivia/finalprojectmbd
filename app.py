@@ -10,7 +10,7 @@ with conn.session as session:
     query = text('CREATE TABLE IF NOT EXISTS movie_schedule (id SERIAL, movie_title TEXT, genre TEXT, director TEXT, release_date DATE, start_time TIME, end_time TIME, theater_number INT, ticket_price DECIMAL);')
     session.execute(query)
 
-st.header('CINEMA SCHEDULE MANAGEMENT SYSTEM')
+st.header('🎬 CINEMA SCHEDULE MANAGEMENT SYSTEM')
 page_cinema = st.sidebar.selectbox("Choose Menu", ["View Cinema Schedule", "Edit Cinema Schedule"])
 
 if page_cinema == "View Cinema Schedule":
