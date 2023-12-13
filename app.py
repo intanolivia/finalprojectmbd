@@ -15,11 +15,11 @@ with conn.session as session:
 st.header('CINEMA SCHEDULE MANAGEMENT SYSTEM')
 page_cinema = st.sidebar.selectbox("Choose Menu", ["View Cinema Schedule", "Edit Cinema Schedule"])
 
-if page == "View Data":
+if page == "View Cinema Schedule":
     data = conn.query('SELECT * FROM movie_schedule ORDER By id;', ttl="0").set_index('id')
     st.dataframe(data)
 
-if page == "Edit Data":
+if page == "Edit Cinema Schedule":
     if st.button('Tambah Data'):
         with conn.session as session:
             query = text('INSERT INTO movie_schedule (movie_title, genre, director, release_date, start_time, end_time, \
