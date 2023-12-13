@@ -10,7 +10,7 @@ with conn.session as session:
         query = text('CREATE TABLE IF NOT EXISTS movie_schedule (id serial, movie_title varchar, genre varchar, director varchar, \
                                                             release_date date, start_time time, end_time time, \
                                                             theater_number int, ticket_price decimal);')
-    session.execute(query)
+        session.execute(query)
 
 st.header('CINEMA SCHEDULE MANAGEMENT SYSTEM')
 page_cinema = st.sidebar.selectbox("Choose Menu", ["View Cinema Schedule", "Edit Cinema Schedule"])
