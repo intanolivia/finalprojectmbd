@@ -40,15 +40,15 @@ if page_cinema == "Edit Cinema Schedule":
         theater_number_lama = result["theater_number"]
         ticket_price_lama = result["ticket_price"]
 
-        with st.expander(f'{movie_title_lama}'):
+        with st.expander(f'a.n. {movie_title_lama}'):
             with st.form(f'movie-data-{id}'):
                 movie_title_baru = st.text_input("Movie Title", movie_title_lama)
-                genre_baru = st.selectbox("Genre", ["Sci-Fi", "Drama", "Action", "Crime"])
+                genre_baru = st.selectbox("Genre", list_genre, list_genre.index(genre_lama))
                 director_baru = st.text_input("Director", director_name_lama)
                 release_date_baru = st.date_input("Release Date", release_date_lama)
                 start_time_baru = st.time_input("Start Time", start_time_lama)
                 end_time_baru = st.time_input("End Time", end_time_lama)
-                theater_number_baru = st.selectbox("Theater Number",["1", "2", "3"])
+                theater_number_baru = st.selectbox("Theater Number", list_theater_number, list_theater_number.index(teather_number_lama)))
                 ticket_price_baru = st.number_input("Ticket Price", ticket_price_lama)
 
                 col1, col2 = st.columns([1, 6])
@@ -62,7 +62,8 @@ if page_cinema == "Edit Cinema Schedule":
                                           WHERE id=:9;')
                             session.execute(query_update_cinema, {'1': movie_title_baru, '2': genre_baru, '3': director_baru,'4': release_date_baru, '5': start_time_baru, '6': end_time_baru,'7': theater_number_baru, '8': ticket_price_baru, '9': id})
                             session.commit()
-
+                            st.experimental_rerun()
+                          
                 with col2:
                     if st.form_submit_button('DELETE'):
                         query_delete_cinema = text(f'DELETE FROM movie_schedule WHERE id=:1;')
