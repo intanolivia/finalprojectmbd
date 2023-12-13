@@ -29,9 +29,9 @@ if page_cinema == "View Cinema Schedule":
 if page_cinema == "Edit Cinema Schedule":
     # Add Movie Schedule Button
     if st.button('Add Movie Schedule'):
-        with engine.connect() as connection:
+        with Session() as session:
             query_add_cinema = text('INSERT INTO movie_schedule (movie_title, genre, director, release_date, start_time, end_time, theater_number, ticket_price) VALUES (:1, :2, :3, :4, :5, :6, :7, :8);')
-            connection.execute(query_add_cinema, {'1': '', '2': '', '3': '', '4': None, '5': None, '6': None, '7': None, '8': None})
+            session.execute(query_add_cinema, {'1': '', '2': '', '3': '', '4': None, '5': None, '6': None, '7': None, '8': None})
 
     # Display existing cinema schedule data with options to edit or delete
     data = pd.read_sql('SELECT * FROM movie_schedule ORDER BY id;', engine)
