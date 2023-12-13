@@ -10,10 +10,10 @@ st.markdown(
     <style>
         .sidebar .sidebar-content {
             background: linear-gradient(to bottom, #1d5e72, #2b3e4f);
-            color: white;
+            color: black;
         }
         .sidebar .sidebar-content .block-container {
-            color: white;
+            color: black;
         }
         .sidebar .sidebar-content .block-container a {
             color: #ffcb2b;
