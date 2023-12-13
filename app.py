@@ -1,6 +1,8 @@
 import streamlit as st
 from sqlalchemy import text
 
+st.set_page_config(page_title="Cinema Schedule Management System", page_icon=":movie_camera:", layout="wide")
+
 list_genre = ['', 'Sci-Fi', 'Drama', 'Action', 'Crime']
 list_theater_number = ['', '1', '2', '3']
 
