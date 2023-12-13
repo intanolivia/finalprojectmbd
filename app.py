@@ -1,43 +1,6 @@
 import streamlit as st
 from sqlalchemy import text
 
-# Customizing Streamlit page
-st.set_page_config(page_title="Cinema Schedule Management", page_icon="🎬", layout="wide")
-
-# Custom style for sidebar
-st.markdown(
-    """
-    <style>
-        .sidebar .sidebar-content {
-            background: linear-gradient(to bottom, #1d5e72, #2b3e4f);
-            color: black;
-        }
-        .sidebar .sidebar-content .block-container {
-            color: black;
-        }
-        .sidebar .sidebar-content .block-container a {
-            color: #ffcb2b;
-        }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
-
-# Custom style for main content
-st.markdown(
-    """
-    <style>
-        .main {
-            background-color: #f0f5f5;
-        }
-        .st-d7.st-d6.st-dn.st-du.st-ek.st-dq.st-dr.st-dp.st-et.st-du.st-dt.st-ei {
-            padding: 0 20px;
-        }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
-
 list_genre = ['', 'Sci-Fi', 'Drama', 'Action', 'Crime']
 list_theater_number = ['', '1', '2', '3']
 
@@ -47,18 +10,15 @@ with conn.session as session:
     query = text('CREATE TABLE IF NOT EXISTS movie_schedule (id SERIAL, movie_title TEXT, genre TEXT, director TEXT, release_date DATE, start_time TIME, end_time TIME, theater_number INT, ticket_price DECIMAL);')
     session.execute(query)
 
-# Header with cinema icon
-st.title('🎬 CINEMA SCHEDULE MANAGEMENT SYSTEM')
+st.header('CINEMA SCHEDULE MANAGEMENT SYSTEM')
+page_cinema = st.sidebar.selectbox("Choose Menu", ["View Cinema Schedule", "Edit Cinema Schedule"])
 
-# Sidebar with movie icon and styling
-page_cinema = st.sidebar.selectbox("Choose Menu", ["🎥 View Cinema Schedule", "✏️ Edit Cinema Schedule"])
-
-if page_cinema == "🎥 View Cinema Schedule":
+if page_cinema == "View Cinema Schedule":
     data = conn.query('SELECT * FROM movie_schedule ORDER By id;', ttl="0").set_index('id')
     st.dataframe(data)
 
-if page_cinema == "✏️ Edit Cinema Schedule":
-    if st.button('➕ Add Movie Schedule'):
+if page_cinema == "Edit Cinema Schedule":
+    if st.button('Add Data'):
         with conn.session as session:
             query = text('INSERT INTO movie_schedule (movie_title, genre, director, release_date, start_time, end_time, theater_number, ticket_price) VALUES (:1, :2, :3, :4, :5, :6, :7, :8);')
             session.execute(query, {'1':'', '2':'', '3':'', '4':'', '5':'', '6':'', '7':'', '8':''})
@@ -79,12 +39,12 @@ if page_cinema == "✏️ Edit Cinema Schedule":
         with st.expander(f'Movie {movie_title_lama}'):
             with st.form(f'movie-data-{id}'):
                 movie_title_baru = st.text_input("Movie Title", movie_title_lama)
-                genre_baru = st.selectbox("Genre", list_genre, list_genre.index(genre_lama))
+                genre_baru = st.selectbox("Genre", ["Sci-Fi", "Drama", "Action", "Crime"])
                 director_baru = st.text_input("Director", director_name_lama)
                 release_date_baru = st.date_input("Release Date", release_date_lama)
                 start_time_baru = st.time_input("Start Time", start_time_lama)
                 end_time_baru = st.time_input("End Time", end_time_lama)
-                theater_number_baru = st.selectbox("Theater Number", list_theater_number, list_theater_number.index(str(theater_number_lama)))
+                theater_number_baru = st.selectbox("Theater Number",["1", "2", "3"])
                 ticket_price_baru = st.number_input("Ticket Price", ticket_price_lama)
                 
                 col1, col2 = st.columns([1, 6])
