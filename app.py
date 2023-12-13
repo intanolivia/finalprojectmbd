@@ -13,7 +13,7 @@ with conn.session as session:
     session.execute(query)
 
 st.header('🎬 CINEMA SCHEDULE MANAGEMENT SYSTEM')
-page_cinema = st.sidebar.selectbox("Choose Menu", ["🎥 View Cinema Schedule", "✏ Edit Cinema Schedule"])
+page_cinema = st.sidebar.selectbox("Choose Menu", ["🎥View Cinema Schedule", "✏Edit Cinema Schedule"])
 
 if page_cinema == "🎥View Cinema Schedule":
     data = conn.query('SELECT * FROM movie_schedule ORDER By id;', ttl="0").set_index('id')
