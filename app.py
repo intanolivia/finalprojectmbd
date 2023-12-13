@@ -1,46 +1,66 @@
 import streamlit as st
+import psycopg2
 from sqlalchemy import text
 
 list_genre = ['', 'Sci-Fi', 'Drama', 'Action', 'Comedy']
 list_theater_number = ['', '1', '2', '3']
 
-@st.cache(allow_output_mutation=True)
-def get_connection():
-    return st._get_session()
+# Establishing PostgreSQL connection
+conn = psycopg2.connect(
+    host="ep-morning-waterfall-53636265.us-east-2.aws.neon.tech",
+    user="intanoliviaitaliyana",
+    password="BHs3h0cygXUa",
+    database="web",
+)
+cursor = conn.cursor()
 
-conn = get_connection()
-
-with conn.session as session:
-    query = text('CREATE TABLE IF NOT EXISTS movie_schedule (id serial, movie_title varchar, genre varchar, director varchar, \
-                                                            release_date date, start_time time, end_time time, theater_number int, ticket_price decimal);')
-    session.execute(query)
+# Creating movie_schedule table if not exists
+create_table_query = '''
+    CREATE TABLE IF NOT EXISTS movie_schedule (
+        id SERIAL,
+        movie_title VARCHAR,
+        genre VARCHAR,
+        director VARCHAR,
+        release_date DATE,
+        start_time TIME,
+        end_time TIME,
+        theater_number INT,
+        ticket_price DECIMAL
+    );
+'''
+cursor.execute(create_table_query)
+conn.commit()
 
 st.header('CINEMA SCHEDULE MANAGEMENT SYSTEM')
 page = st.sidebar.selectbox("Choose Menu", ["View Schedule", "Edit Schedule"])
 
 if page == "View Schedule":
-    data = conn.query('SELECT * FROM movie_schedule ORDER BY id;', ttl="0").set_index('id')
+    # Fetch and display cinema schedule data
+    cursor.execute('SELECT * FROM movie_schedule ORDER BY id;')
+    data = cursor.fetchall()
     st.dataframe(data)
 
 if page == "Edit Schedule":
     if st.button('Add Movie Schedule'):
-        with conn.session as session:
-            query_add_cinema = text('INSERT INTO movie_schedule (movie_title, genre, director, release_date, start_time, end_time, theater_number, ticket_price) \
-                                     VALUES (:1, :2, :3, :4, :5, :6, :7, :8);')
-            session.execute(query_add_cinema, {'1': '', '2': '', '3': '', '4': None, '5': None, '6': None, '7': None, '8': None})
-            session.commit()
+        # Add new movie schedule
+        query_add_cinema = text('INSERT INTO movie_schedule (movie_title, genre, director, release_date, start_time, end_time, theater_number, ticket_price) \
+                                 VALUES (:1, :2, :3, :4, :5, :6, :7, :8);')
+        cursor.execute(query_add_cinema, {'1': '', '2': '', '3': '', '4': None, '5': None, '6': None, '7': None, '8': None})
+        conn.commit()
 
-    data = conn.query('SELECT * FROM movie_schedule ORDER BY id;', ttl="0")
-    for _, result in data.iterrows():
-        id = result['id']
-        movie_title_lama = result["movie_title"]
-        genre_lama = result["genre"]
-        director_name_lama = result["director"]
-        release_date_lama = result["release_date"]
-        start_time_lama = result["start_time"]
-        end_time_lama = result["end_time"]
-        theater_number_lama = result["theater_number"]
-        ticket_price_lama = result["ticket_price"]
+    # Display existing cinema schedule data with options to edit or delete
+    cursor.execute('SELECT * FROM movie_schedule ORDER BY id;')
+    data = cursor.fetchall()
+    for result in data:
+        id = result[0]
+        movie_title_lama = result[1]
+        genre_lama = result[2]
+        director_name_lama = result[3]
+        release_date_lama = result[4]
+        start_time_lama = result[5]
+        end_time_lama = result[6]
+        theater_number_lama = result[7]
+        ticket_price_lama = result[8]
 
         with st.expander(f'{movie_title_lama}'):
             with st.form(f'movie-data-{id}'):
@@ -57,19 +77,18 @@ if page == "Edit Schedule":
 
                 with col1:
                     if st.form_submit_button('UPDATE'):
-                        with conn.session as session:
-                            query_update_cinema = text('UPDATE movie_schedule \
-                                          SET movie_title=:1, genre=:2, director=:3, release_date=:4, \
-                                          start_time=:5, end_time=:6, theater_number=:7, ticket_price=:8 \
-                                          WHERE id=:9;')
-                            session.execute(query_update_cinema, {'1': movie_title_baru, '2': genre_baru, '3': director_baru, '4': release_date_baru,
-                                                                    '5': start_time_baru, '6': end_time_baru, '7': theater_number_baru, '8': ticket_price_baru, '9': id})
-                            session.commit()
-                            st.experimental_rerun()
+                        # Update movie schedule
+                        query_update_cinema = text('UPDATE movie_schedule \
+                                      SET movie_title=:1, genre=:2, director=:3, release_date=:4, \
+                                      start_time=:5, end_time=:6, theater_number=:7, ticket_price=:8 \
+                                      WHERE id=:9;')
+                        cursor.execute(query_update_cinema, {'1': movie_title_baru, '2': genre_baru, '3': director_baru, '4': release_date_baru,
+                                                                '5': start_time_baru, '6': end_time_baru, '7': theater_number_baru, '8': ticket_price_baru, '9': id})
+                        conn.commit()
 
                 with col2:
                     if st.form_submit_button('DELETE'):
-                        query_delete_cinema = text(f'DELETE FROM movie_schedule WHERE id=:1;')
-                        session.execute(query_delete_cinema, {'1': id})
-                        session.commit()
-                        st.experimental_rerun()
+                        # Delete movie schedule
+                        query_delete_cinema = text('DELETE FROM movie_schedule WHERE id=:1;')
+                        cursor.execute(query_delete_cinema, {'1': id})
+                        conn.commit()
