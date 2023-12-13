@@ -40,7 +40,7 @@ if page_cinema == "Edit Cinema Schedule":
         theater_number_lama = result["theater_number"]
         ticket_price_lama = result["ticket_price"]
 
-        with st.expander(f'a.n. {movie_title_lama}'):
+        with st.expander(f'movie {movie_title_lama}'):
             with st.form(f'movie-data-{id}'):
                 movie_title_baru = st.text_input("Movie Title", movie_title_lama)
                 genre_baru = st.selectbox("Genre", list_genre, list_genre.index(genre_lama))
