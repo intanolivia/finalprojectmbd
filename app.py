@@ -9,7 +9,7 @@ engine = create_engine("postgresql://intanoliviaitaliyana:BHs3h0cygXUa@ep-mornin
 
 with engine.connect() as connection:
     query = text('CREATE TABLE IF NOT EXISTS MOVIE_SCHEDULE (id serial, movie_title varchar, genre varchar, director varchar, \
-                                                       release_date date, start_time time, end_time time, theater_number int, ticket_price decimal);')
+                                                       release_date date, start_time time, end_time time, theater_number varchar, ticket_price decimal);')
     connection.execute(query)
 
 st.header('CINEMA SCHEDULE MANAGEMENT SYSTEM')
