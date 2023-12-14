@@ -23,7 +23,7 @@ if page_cinema == "✏ Edit Cinema Schedule":
     if st.button('Add Data'):
         with conn.session as session:
             query = text('INSERT INTO movie_schedule (movie_title, genre, director, release_date, start_time, end_time, theater_number, ticket_price) VALUES (:movie_title, :genre, :director, :release_date, :start_time, :end_time, :theater_number, :ticket_price);')
-            data = {
+              data = {
                 'movie_title': '',
                 'genre': '',
                 'director': '',
