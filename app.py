@@ -23,7 +23,7 @@ if page_cinema == "✏ Edit Cinema Schedule":
     if st.button('Add Data'):
         with conn.session as session:
             query = text('INSERT INTO movie_schedule (movie_title, genre, director, release_date, start_time, end_time, theater_number, ticket_price) VALUES (:movie_title, :genre, :director, :release_date, :start_time, :end_time, :theater_number, :ticket_price);')
-            data_a = {
+            data = {
                 'movie_title': '',
                 'genre': '',
                 'director': '',
@@ -33,8 +33,9 @@ if page_cinema == "✏ Edit Cinema Schedule":
                 'theater_number': '',
                 'ticket_price': ''
             }
-            session.execute(query, data_a)
+            session.execute(query, data)
             session.commit()
+
 
     data = conn.query('SELECT * FROM movie_schedule ORDER By id;', ttl="0")
     for _, result in data.iterrows():        
