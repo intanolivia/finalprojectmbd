@@ -1,6 +1,8 @@
 import streamlit as st
 from sqlalchemy import text
 
+st.set_page_config(page_title="Cinema Schedule Management System", page_icon=":movie_camera:", layout="wide")
+
 list_genre = ['', 'Sci-Fi', 'Drama', 'Action', 'Crime']
 list_theater_number = ['', '1', '2', '3']
 
@@ -10,21 +12,20 @@ with conn.session as session:
     query = text('CREATE TABLE IF NOT EXISTS movie_schedule (id SERIAL, movie_title TEXT, genre TEXT, director TEXT, release_date DATE, start_time TIME, end_time TIME, theater_number INT, ticket_price DECIMAL);')
     session.execute(query)
 
-st.header('CINEMA SCHEDULE MANAGEMENT SYSTEM')
-page_cinema = st.sidebar.selectbox("Choose Menu", ["View Cinema Schedule", "Edit Cinema Schedule"])
+st.header('🎬 CINEMA SCHEDULE MANAGEMENT SYSTEM')
+page_cinema = st.sidebar.selectbox("Choose Menu", ["🎥 View Cinema Schedule", "✏ Edit Cinema Schedule"])
 
-if page_cinema == "View Cinema Schedule":
+if page_cinema == "🎥 View Cinema Schedule":
     data = conn.query('SELECT * FROM movie_schedule ORDER By id;', ttl="0").set_index('id')
     st.dataframe(data)
 
-if page == "✏ Edit Cinema Schedule":
+if page_cinema == "✏ Edit Cinema Schedule":
     if st.button('Add Data'):
         with conn.session as session:
-            query = text('INSERT INTO movie_schedule (movie_title, genre, director, release_date, start_time, end_time, theater_number, ticket_price) \
-                          VALUES (:1, :2, :3, :4, :5, :6, :7, :8);')
-            session.execute(query, {'1':'', '2':'', '3':'', '4':None, '5':None, '6':None, '7':'', '8':None})
+            query = text('INSERT INTO movie_schedule (movie_title, genre, director, release_date, start_time, end_time, theater_number, ticket_price) VALUES (:1, :2, :3, :4, :5, :6, :7, :8);')
+            session.execute(query, {'1':'', '2':'', '3':'', '4':'', '5':'', '6':'', '7':'', '8':''})
             session.commit()
-          
+
     data = conn.query('SELECT * FROM movie_schedule ORDER By id;', ttl="0")
     for _, result in data.iterrows():        
         id = result['id']
