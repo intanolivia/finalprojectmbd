@@ -9,7 +9,7 @@ list_theater_number = ['', '1', '2', '3']
 conn = st.connection("postgresql", type="sql", 
                      url="postgresql://intanoliviaitaliyana:BHs3h0cygXUa@ep-morning-waterfall-53636265.us-east-2.aws.neon.tech/web")
 with conn.session as session:
-    query = text('CREATE TABLE IF NOT EXISTS movie_schedule (id SERIAL, movie_title TEXT, genre TEXT, director TEXT, release_date DATE, start_time TIME, end_time TIME, theater_number INT, ticket_price DECIMAL);')
+    query = text('CREATE TABLE IF NOT EXISTS movie_schedule (id SERIAL, movie_title TEXT, genre TEXT, director TEXT, release_date DATE, start_time TIME, end_time TIME, theater_number INT, ticket_price INT);')
     session.execute(query)
 
 st.header('🎬 CINEMA SCHEDULE MANAGEMENT SYSTEM')
@@ -23,7 +23,7 @@ if page_cinema == "✏ Edit Cinema Schedule":
     if st.button('Add Data'):
         with conn.session as session:
             query = text('INSERT INTO movie_schedule (movie_title, genre, director, release_date, start_time, end_time, theater_number, ticket_price)\ VALUES (:1, :2, :3, :4, :5, :6, :7, :8);')
-            session.execute(query, {'1':'', '2':'', '3':'', '4':None, '5':'', '6':'', '7':'', '8':''})
+            session.execute(query, {'1':'', '2':'', '3':'', '4':None, '5':None, '6':None, '7':'', '8':''})
             session.commit()
 
     data = conn.query('SELECT * FROM movie_schedule ORDER By id;', ttl="0")
